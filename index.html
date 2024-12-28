@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Tracker</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome for Icons -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f4f7fc;
+      font-family: 'Arial', sans-serif;
+    }
+
+    .container {
+      margin-top: 50px;
+    }
+
+    .card {
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+    }
+
+    .header {
+      background-color: #4caf50;
+      color: white;
+      padding: 15px;
+      text-align: center;
+      border-radius: 8px 8px 0 0;
+    }
+
+    .card-body {
+      padding: 30px;
+    }
+
+    .payment-list {
+      margin-top: 20px;
+      max-height: 250px;
+      overflow-y: auto;
+    }
+
+    .payment-item {
+      background-color: #e7f7e7;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      animation: fadeIn 1s ease;
+    }
+
+    .payment-item i {
+      margin-right: 10px;
+    }
+
+    .amount {
+      font-weight: bold;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .btn-add-payment {
+      animation: bounceIn 1s;
+    }
+
+    /* CSS Animations */
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+      }
+
+      100% {
+        opacity: 1;
+      }
+    }
+
+    @keyframes bounceIn {
+      0% {
+        transform: scale(0);
+      }
+
+      50% {
+        transform: scale(1.05);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    .btn-add-payment:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <div class="card">
+      <div class="header">
+        <h3>Payment Tracker</h3>
+        <p>Track payments made to your friend.</p>
+      </div>
+
+      <div class="card-body">
+        <!-- Total Amount Section -->
+        <div class="row mb-4">
+          <div class="col-md-4">
+            <h5>Total Amount:</h5>
+            <p class="amount" id="totalAmount">$500</p>
+          </div>
+          <div class="col-md-4">
+            <h5>Remaining Amount:</h5>
+            <p class="amount" id="remainingAmount">$500</p>
+          </div>
+        </div>
+
+        <!-- Payment List Section -->
+        <h4>Payment History</h4>
+        <div class="payment-list" id="paymentList">
+          <!-- Payment Items will go here -->
+        </div>
+
+        <!-- Add Payment Form -->
+        <div class="form-group mt-4">
+          <label for="paymentAmount">Enter Payment Amount:</label>
+          <input type="number" class="form-control" id="paymentAmount" placeholder="Amount to pay">
+        </div>
+        <div class="form-group">
+          <button class="btn btn-success btn-add-payment" id="addPaymentBtn">Add Payment</button>
+        </div>
+      </div>
+
+      <div class="footer">
+        <p>Developed with 💻 by YourName</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS, Popper.js, and jQuery -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.0/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <!-- Custom JS -->
+  <script>
+    // Retrieve data from localStorage or set default values
+    let totalAmount = parseFloat(localStorage.getItem('totalAmount')) || 500;
+    let remainingAmount = parseFloat(localStorage.getItem('remainingAmount')) || totalAmount;
+    let paymentHistory = JSON.parse(localStorage.getItem('paymentHistory')) || [];
+
+    // Get DOM elements
+    const totalAmountElem = document.getElementById('totalAmount');
+    const remainingAmountElem = document.getElementById('remainingAmount');
+    const paymentList = document.getElementById('paymentList');
+    const paymentAmountElem = document.getElementById('paymentAmount');
+
+    // Function to update the payment list and amounts
+    function renderPayments() {
+      // Render payment history
+      paymentList.innerHTML = '';
+      paymentHistory.forEach(payment => {
+        const paymentItem = document.createElement('div');
+        paymentItem.classList.add('payment-item');
+        paymentItem.innerHTML = `<i class="fas fa-dollar-sign"></i> Paid: $${payment.amount} on ${payment.date}`;
+        paymentList.appendChild(paymentItem);
+      });
+
+      // Update total and remaining amounts on the page
+      totalAmountElem.textContent = `$${totalAmount}`;
+      remainingAmountElem.textContent = `$${remainingAmount.toFixed(2)}`;
+    }
+
+    // Function to handle adding a new payment
+    function addPayment() {
+      const paymentAmount = parseFloat(paymentAmountElem.value);
+      if (isNaN(paymentAmount) || paymentAmount <= 0 || paymentAmount > remainingAmount) {
+        alert('Please enter a valid payment amount.');
+        return;
+      }
+
+      // Create a new payment record
+      const paymentTime = new Date().toLocaleString();
+      remainingAmount -= paymentAmount;
+
+      // Store the payment in the history
+      paymentHistory.push({ amount: paymentAmount, date: paymentTime });
+
+      // Update localStorage
+      localStorage.setItem('paymentHistory', JSON.stringify(paymentHistory));
+      localStorage.setItem('remainingAmount', remainingAmount.toFixed(2));
+
+      // Render the updated list and amounts
+      renderPayments();
+
+      // Clear the input field
+      paymentAmountElem.value = '';
+    }
+
+    // Event listener for the 'Add Payment' button
+    document.getElementById('addPaymentBtn').addEventListener('click', addPayment);
+
+    // Render initial data from localStorage
+    renderPayments();
+  </script>
+</body>
+
+</html>
