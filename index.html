@@ -166,7 +166,7 @@
       remainingAmount -= paymentAmount;
       paymentHistory.push({ amount: paymentAmount, date: paymentTime });
       localStorage.setItem('paymentHistory', JSON.stringify(paymentHistory));
-      localStorage.setItem('remainingAmount', remainingAmount.toFixed(2));\
+      localStorage.setItem('remainingAmount', remainingAmount.toFixed(2));
       renderPayments();
       paymentAmountElem.value = '';
     }
