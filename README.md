@@ -1,244 +1,492 @@
-# Operating Systems – 10 Marks Answers
+# APPLIED MACHINE LEARNING – MID 2  
+## M.Tech CSE – I Semester  
 
 ---
 
-## 1. Handling of Deadlocks and Various Deadlock Handling Strategies
+## Question 1: Describe Support Vector Machines (SVM) in detail  
+*(10 Marks)*
 
 ### Introduction
-A **deadlock** is a situation in an operating system where a set of processes are permanently blocked because each process is holding one or more resources and waiting for additional resources held by other processes. Since none of the processes can proceed, the system enters an indefinite waiting state. Deadlocks usually occur in multiprogramming environments where multiple processes compete for limited resources such as CPU, memory, files, and I/O devices.
+Support Vector Machine (SVM) is a **supervised machine learning algorithm** mainly used for **classification** and also for **regression** problems. The main aim of SVM is to separate data points belonging to different classes using a decision boundary in the best possible way. SVM is known for its good performance even when the dataset size is small.
 
 ---
 
-### Necessary Conditions for Deadlock
-Deadlock can occur only if all the following four conditions hold simultaneously:
-
-1. **Mutual Exclusion**  
-   At least one resource must be non-shareable, meaning only one process can use it at a time.
-
-2. **Hold and Wait**  
-   A process holding at least one resource is waiting to acquire additional resources held by other processes.
-
-3. **No Preemption**  
-   Resources cannot be forcibly taken from a process and must be released voluntarily.
-
-4. **Circular Wait**  
-   A circular chain of processes exists, where each process holds a resource required by the next process in the chain.
+### Basic Idea of SVM
+The basic idea of SVM is to find a boundary that separates the classes with the **maximum margin**.  
+- The separating boundary is called a **hyperplane**  
+- The margin is the distance between the hyperplane and the nearest data points from each class  
+- A larger margin leads to better accuracy on unseen data  
 
 ---
 
-### Deadlock Handling Strategies
+### Hyperplane
+A hyperplane is a line or surface that divides the data into different classes.
+- In 2D, it is a straight line  
+- In 3D, it is a plane  
+- In higher dimensions, it is called a hyperplane  
 
-#### 1. Deadlock Prevention
-Deadlock prevention ensures that at least one of the necessary conditions for deadlock never occurs. This can be achieved by eliminating mutual exclusion where possible, forcing processes to request all resources at once to avoid hold and wait, or enforcing a strict ordering of resource requests to prevent circular wait.
+Mathematically, it is represented as:
 
-**Advantages**
-- Guarantees deadlock-free system
+w · x + b = 0  
 
-**Disadvantages**
-- Poor resource utilization
-- Possible starvation
-
----
-
-#### 2. Deadlock Avoidance
-Deadlock avoidance dynamically checks resource allocation requests and ensures that the system always remains in a **safe state**. The most commonly used avoidance technique is the **Banker’s Algorithm**, which requires prior knowledge of maximum resource requirements of each process.
-
-**Advantages**
-- Better resource utilization than prevention
-
-**Disadvantages**
-- High computational overhead
-- Requires advance information
+where  
+- w is the weight vector  
+- x is the input feature vector  
+- b is the bias  
 
 ---
 
-#### 3. Deadlock Detection and Recovery
-In this approach, deadlocks are allowed to occur and are detected periodically using detection algorithms such as resource allocation graphs. Once detected, recovery is performed by terminating deadlocked processes or preempting resources.
-
-**Advantages**
-- No restriction on resource requests
-
-**Disadvantages**
-- Recovery cost is high
-- Possible loss of data
+### Support Vectors
+Support vectors are the **most important data points** in SVM.
+- These points lie closest to the hyperplane  
+- They decide the position of the hyperplane  
+- Removing other data points does not change the model much  
 
 ---
 
-#### 4. Deadlock Ignorance
-The operating system ignores deadlocks assuming they are rare. This approach is used in general-purpose operating systems such as UNIX and Windows.
+### Margin
+- Margin is the distance between the hyperplane and support vectors  
+- SVM always tries to maximize the margin  
+- Larger margin improves generalization  
+
+---
+
+### Hard Margin SVM
+- Used when data is perfectly separable  
+- No misclassification allowed  
+- Very sensitive to noise  
+- Not suitable for real-world data  
+
+---
+
+### Soft Margin SVM
+- Allows some misclassification  
+- Uses slack variables  
+- Controlled by a parameter C  
+- Suitable for noisy real-world datasets  
+
+---
+
+### Kernel Trick
+When data is not linearly separable, SVM uses the **kernel trick**.
+- It maps data into higher-dimensional space  
+- Makes non-linear data separable  
+
+Common kernels:
+- Linear kernel  
+- Polynomial kernel  
+- Radial Basis Function (RBF)  
+- Sigmoid kernel  
+
+---
+
+### Advantages of SVM
+- Works well with high-dimensional data  
+- Effective for small datasets  
+- Good generalization ability  
+
+---
+
+### Disadvantages of SVM
+- Computationally expensive for large datasets  
+- Kernel selection is difficult  
+- Not suitable for very noisy data  
+
+---
+
+### Applications
+- Text classification  
+- Image recognition  
+- Face detection  
+- Bioinformatics  
 
 ---
 
 ### Conclusion
-Deadlock handling is a crucial aspect of operating system design. Each strategy has its own advantages and limitations, and the choice of method depends on system requirements and performance considerations.
+Support Vector Machine is a powerful algorithm that focuses on finding the best decision boundary. By maximizing the margin and using kernel functions, SVM achieves high accuracy and good performance in many machine learning applications.
 
 ---
 
-## 2. Process Scheduling in Multiprocessor Operating Systems – Compare Scheduling Approaches
+## Question 2: Explain the Nearest Neighbour Classification Algorithm  
+*(10 Marks)*
 
 ### Introduction
-A **multiprocessor operating system** consists of two or more processors that share system resources such as main memory, secondary storage, and I/O devices. Unlike uniprocessor systems, multiprocessor systems can execute multiple processes simultaneously, which improves performance and throughput. However, process scheduling in such systems is more complex due to challenges like **load balancing**, **processor affinity**, **synchronization**, and **cache consistency**.
-
-The main goal of multiprocessor scheduling is to distribute processes efficiently among processors to maximize system performance while maintaining fairness.
+Nearest Neighbour classification is one of the **simplest supervised machine learning algorithms**. It classifies a data point based on the class labels of nearby data points. It does not build a model during training but stores all the training data.
 
 ---
 
-### Objectives of Multiprocessor Scheduling
-- Maximize overall CPU utilization  
-- Improve system throughput  
-- Minimize response time and waiting time  
-- Achieve effective load balancing  
-- Reduce process migration overhead  
-- Improve cache performance  
+### Basic Concept
+The algorithm works on the assumption that:
+> Data points that are close to each other belong to the same class.
+
+The most commonly used version is called **k-Nearest Neighbour (k-NN)**.
 
 ---
 
-### Scheduling Approaches
-
-#### 1. Asymmetric Multiprocessing (AMP)
-In **Asymmetric Multiprocessing**, one processor is designated as the **master processor**. The master processor is responsible for scheduling, I/O handling, and system management, while the remaining processors execute user-level processes.
-
-**Advantages**
-- Simple design and easy implementation  
-- Reduced synchronization complexity  
-
-**Disadvantages**
-- Master processor becomes a bottleneck  
-- Poor scalability as the number of processors increases  
+### Working of the Algorithm
+1. Store all training data with their labels  
+2. Choose a value of k  
+3. Calculate distance between test point and training points  
+4. Select k nearest data points  
+5. Assign the class using majority voting  
 
 ---
 
-#### 2. Symmetric Multiprocessing (SMP)
-In **Symmetric Multiprocessing**, all processors are treated equally. Each processor independently performs scheduling and can execute both system and user processes. Any process can run on any processor.
+### Distance Measures
+Commonly used distance measures are:
+- Euclidean distance  
+- Manhattan distance  
+- Minkowski distance  
+- Cosine similarity  
 
-**Advantages**
-- Better load balancing  
-- High scalability  
-- No single point of failure  
-
-**Disadvantages**
-- Increased synchronization overhead  
-- More complex scheduling algorithms  
+Feature scaling is important to avoid incorrect distance calculations.
 
 ---
 
-#### 3. Global Scheduling
-In global scheduling, all ready processes are stored in a **single global ready queue**. Any processor can select a process from the queue for execution.
-
-**Advantages**
-- Simple scheduling mechanism  
-- Dynamic load balancing  
-
-**Disadvantages**
-- High contention for the global queue  
-- Frequent process migration affects cache performance  
+### Choice of k
+- Small k leads to noise sensitivity  
+- Large k smooths the decision boundary  
+- Odd values of k avoid tie problems  
 
 ---
 
-#### 4. Partitioned Scheduling
-In partitioned scheduling, processes are **statically assigned** to specific processors. Each processor maintains its own local ready queue and schedules only the processes assigned to it.
-
-**Advantages**
-- Reduced scheduling overhead  
-- Better cache locality  
-- No contention among processors  
-
-**Disadvantages**
-- Load imbalance may occur  
-- Less flexible compared to global scheduling  
+### Advantages
+- Simple and easy to understand  
+- No training phase required  
+- Works well for multi-class problems  
 
 ---
 
-#### 5. Processor Affinity
-Processor affinity ensures that a process prefers to execute on the same processor it previously ran on. This improves cache utilization and reduces performance loss due to process migration.
+### Disadvantages
+- Slow during prediction  
+- Requires large memory  
+- Sensitive to noisy and irrelevant features  
 
-- **Soft Affinity**: OS attempts to keep the process on the same processor  
-- **Hard Affinity**: Process is permanently bound to a processor  
+---
+
+### Applications
+- Recommendation systems  
+- Pattern recognition  
+- Medical diagnosis  
+- Image classification  
 
 ---
 
 ### Conclusion
-Multiprocessor scheduling plays a vital role in overall system performance. Modern operating systems generally use **SMP combined with processor affinity** to balance scalability, performance, and efficient resource utilization.
+Nearest Neighbour classification is easy to implement and understand. Though it is computationally expensive at prediction time, it performs well when the dataset is small and decision boundaries are complex.
 
 ---
 
-## 3. Distributed Shared Memory (DSM): Architecture, Motivation, Memory Coherence Protocols, and Design Issues
+## Question 3: Describe Common Issues in Training Neural Networks  
+*(10 Marks)*
 
 ### Introduction
-**Distributed Shared Memory (DSM)** is a memory management model that provides the abstraction of a shared memory system over physically distributed memory. In DSM, memory is physically distributed across multiple machines, but logically presented as a single shared address space. This allows processes running on different machines to communicate through shared variables rather than explicit message passing.
+Neural networks are widely used in modern machine learning applications. However, training them is difficult due to several problems related to optimization, data, and model structure.
 
 ---
 
-### Motivation for DSM
-The main motivations for DSM include:
-- Simplifying parallel and distributed programming  
-- Providing a shared-memory programming model  
-- Improving scalability of distributed systems  
-- Cost efficiency compared to hardware shared memory systems  
+### Vanishing Gradient Problem
+- Gradients become very small during backpropagation  
+- Weight updates become slow  
+- Common in deep networks  
+
+**Solution:**  
+Use ReLU activation, batch normalization
 
 ---
 
-### DSM Architecture
+### Exploding Gradient Problem
+- Gradients become very large  
+- Causes unstable learning  
 
-#### Based on Data Organization
-- **Page-based DSM** – Data sharing occurs at page level  
-- **Object-based DSM** – Objects are shared instead of pages  
-- **Variable-based DSM** – Individual variables are shared  
-
-#### Based on Implementation
-- **Hardware DSM** – Implemented using special hardware support  
-- **Software DSM** – Implemented at operating system or middleware level  
-- **Hybrid DSM** – Combination of hardware and software techniques  
+**Solution:**  
+Gradient clipping, proper weight initialization  
 
 ---
 
-### Memory Coherence in DSM
-Memory coherence ensures that all processes observe a **consistent and correct view of shared data**, even though multiple copies of data may exist across different nodes. Maintaining coherence is one of the major challenges in DSM systems.
+### Overfitting
+- Model performs well on training data  
+- Poor performance on test data  
+
+**Solution:**  
+Dropout, regularization, early stopping  
 
 ---
 
-### Memory Coherence Protocols
+### Underfitting
+- Model is too simple  
+- Fails to capture patterns  
 
-#### 1. Write Invalidate Protocol
-Before a process updates a shared data item, all other copies of that data are invalidated. Other nodes must fetch the updated data before accessing it again.
-
-**Advantages**
-- Reduced communication overhead  
-- Efficient for write-intensive applications  
+**Solution:**  
+Increase model complexity, train longer  
 
 ---
 
-#### 2. Write Update Protocol
-When a write occurs, the updated value is immediately propagated to all nodes holding a copy.
+### Local Minima and Saddle Points
+- Loss surface is complex  
+- Training may get stuck  
 
-**Advantages**
-- Faster subsequent read operations  
-
-**Disadvantages**
-- High network communication cost  
+**Solution:**  
+Use Adam optimizer, momentum-based methods  
 
 ---
 
-#### 3. Release Consistency
-In release consistency, updates to shared memory are propagated only at synchronization points such as locks and barriers. This reduces unnecessary communication and improves performance.
+### Learning Rate Problems
+- High learning rate causes divergence  
+- Low learning rate slows training  
+
+**Solution:**  
+Learning rate scheduling  
 
 ---
 
-### Design Issues in DSM
-- Choice of memory consistency model  
-- Granularity of data sharing  
-- False sharing problem  
-- Network latency  
-- Scalability and fault tolerance  
-
----
-
-### Advantages of DSM
-- Transparent shared memory abstraction  
-- Simplifies distributed and parallel programming  
-- Platform independence  
+### Data-Related Issues
+- Noisy data  
+- Imbalanced data  
+- Insufficient training samples  
 
 ---
 
 ### Conclusion
-DSM effectively bridges the gap between shared memory and distributed systems. However, efficient memory coherence, synchronization mechanisms, and latency management are essential for achieving high performance in DSM systems.
+Training neural networks involves many challenges. By selecting proper activation functions, optimizers, and regularization techniques, these problems can be reduced and better model performance can be achieved.
+
+---
+
+### END
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# APPLIED MACHINE LEARNING / NLP – ASSIGNMENT  
+## M.Tech CSE – I Semester  
+
+---
+
+## Question 1: Illustrate with an example how hold mechanisms support long-distance dependencies  
+*(10 Marks)*
+
+### Introduction
+In Natural Language Processing (NLP), understanding a sentence often requires remembering information that appears much earlier in the sentence. When a word depends on another word that is far away, it is called a **long-distance dependency**. Handling such dependencies is difficult for basic neural network models. To overcome this problem, **hold mechanisms** are used, especially in advanced recurrent neural networks.
+
+---
+
+### What are Long-Distance Dependencies?
+A long-distance dependency occurs when words that are far apart in a sentence are still related to each other.
+
+**Example:**
+> *“The boy who was playing in the park with his friends **fell**.”*
+
+Here, the subject **“boy”** appears at the beginning, while the verb **“fell”** appears much later. The model must remember the subject information across many words.
+
+---
+
+### Limitations of Traditional RNNs
+Traditional Recurrent Neural Networks (RNNs):
+- Process words one at a time
+- Gradually forget earlier words
+- Suffer from the vanishing gradient problem
+- Fail to store important information for long sentences
+
+As a result, they cannot handle long-distance dependencies effectively.
+
+---
+
+### Hold Mechanisms
+Hold mechanisms are special structures that help neural networks **store important information for a longer time**. These mechanisms decide:
+- What information should be stored
+- What information should be forgotten
+- When the stored information should be used
+
+They are mainly used in **LSTM (Long Short-Term Memory)** and **GRU (Gated Recurrent Unit)** networks.
+
+---
+
+### How Hold Mechanisms Work
+Hold mechanisms use gates to control information flow:
+- **Input Gate**: decides which new information should be stored
+- **Forget Gate**: removes unnecessary information
+- **Output Gate**: decides what information to pass to the next step
+
+Because of these gates, important information is held safely until required.
+
+---
+
+### Example Using LSTM
+Sentence:
+> *“I lived in Germany for five years and I can speak fluent **German**.”*
+
+Here:
+- The word **“Germany”** appears early
+- The word **“German”** appears later
+- LSTM stores the information about “Germany”
+- It holds this information through many words
+- Finally, it uses the stored information to correctly predict “German”
+
+This shows how hold mechanisms support long-distance dependencies.
+
+---
+
+### Advantages of Hold Mechanisms
+- Prevent loss of important information
+- Solve vanishing gradient problem
+- Improve understanding of long sentences
+- Increase accuracy in NLP tasks
+
+---
+
+### Applications
+- Machine translation
+- Speech recognition
+- Text generation
+- Question answering systems
+
+---
+
+### Conclusion
+Hold mechanisms play a very important role in handling long-distance dependencies in NLP. By storing and controlling information over long sequences, models like LSTM and GRU perform much better than traditional RNNs.
+
+---
+
+## Question 2: Describe parameter estimation techniques used in language modelling  
+*(10 Marks)*
+
+### Introduction
+Language modelling is the process of predicting the probability of a word sequence. To build an effective language model, we need to estimate parameters such as word probabilities and model weights. **Parameter estimation** refers to finding the best values of these parameters using training data.
+
+---
+
+### Importance of Parameter Estimation
+Good parameter estimation:
+- Improves prediction accuracy
+- Helps in handling unseen words
+- Improves generalization of the model
+
+---
+
+### Maximum Likelihood Estimation (MLE)
+Maximum Likelihood Estimation is the most commonly used technique.
+
+- It estimates parameters by maximizing the probability of observed data
+- Frequently occurring word sequences get higher probability
+
+**Example:**
+If “machine learning” appears many times in training data, MLE assigns a higher probability to this phrase.
+
+**Advantages:**
+- Simple and easy to implement
+- Works well with large datasets
+
+**Limitation:**
+- Assigns zero probability to unseen words
+
+---
+
+### Smoothing Techniques
+Smoothing techniques are used to avoid zero probability problems.
+
+#### Laplace (Add-One) Smoothing
+- Adds one to every word count
+- Ensures no probability becomes zero
+- Simple but may over-smooth data
+
+#### Good-Turing Smoothing
+- Adjusts probabilities of unseen events
+- More accurate than Laplace smoothing
+- Used in practical systems
+
+---
+
+### Backoff and Interpolation Methods
+- **Backoff**: Uses lower-order models when higher-order data is missing
+- **Interpolation**: Combines probabilities from multiple n-gram models
+
+These techniques improve robustness.
+
+---
+
+### Neural Network-Based Estimation
+Modern language models use neural networks:
+- Parameters are weights of the network
+- Learned using gradient descent
+- Loss minimized using backpropagation
+- Optimizers like Adam and SGD are used
+
+---
+
+### Conclusion
+Parameter estimation is a key part of language modelling. Techniques like MLE, smoothing, backoff, and neural network-based learning help in building accurate and reliable language models.
+
+---
+
+## Question 3: Differentiate between Cross-Lingual Information Retrieval (CLIR) and Multilingual Information Retrieval (MLIR)  
+*(10 Marks)*
+
+### Introduction
+Information Retrieval systems help users find relevant information from large collections of documents. When multiple languages are involved, two important approaches are used: **Cross-Lingual Information Retrieval (CLIR)** and **Multilingual Information Retrieval (MLIR)**. Although they sound similar, they differ in purpose and operation.
+
+---
+
+### Cross-Lingual Information Retrieval (CLIR)
+In CLIR:
+- The user query is written in one language
+- Documents are written in another language
+- Translation is required to match query and documents
+
+**Example:**  
+An English query retrieving documents written in Spanish.
+
+CLIR is useful when users do not know the document language.
+
+---
+
+### Multilingual Information Retrieval (MLIR)
+In MLIR:
+- Queries and documents may exist in multiple languages
+- System retrieves documents in several languages at once
+- No restriction on language
+
+**Example:**  
+A single query retrieving documents in English, Hindi, and French.
+
+MLIR is useful for global and international information systems.
+
+---
+
+### Detailed Comparison Between CLIR and MLIR
+
+| Aspect | CLIR | MLIR |
+|------|------|------|
+| Basic Idea | Searches documents written in a language different from the query language | Searches documents written in multiple languages |
+| Query Language | Single language | One or more languages |
+| Document Language | Different from query language | Multiple languages |
+| Translation Requirement | Mandatory (query or document translation) | Optional, depends on system |
+| Output Language | Usually one target language | Multiple languages |
+| System Complexity | Comparatively lower | Higher due to many languages |
+| Challenges | Translation errors, loss of meaning | Language detection, ranking across languages |
+| Use Case | Searching foreign-language documents | Global search platforms |
+
+---
+
+### Conclusion
+CLIR focuses on retrieving information across language boundaries, while MLIR focuses on retrieving information in many languages at the same time. Both are important for handling multilingual data, but MLIR systems are more complex than CLIR systems.
+
+---
+
+### END
+
+
