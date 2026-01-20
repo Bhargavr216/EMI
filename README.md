@@ -42,8 +42,20 @@ Meteorological data helps authorities to:
 
 ## Weather Forecasting and Warning Flow (Diagram)
 
-+------------------------------+ | Weather Observation          | | (Satellite / Radar / Sensors)| +--------------+---------------+ | v +------------------------------+ | Data Collection & Processing | +--------------+---------------+ | v +------------------------------+ | Weather Prediction Models    | +--------------+---------------+ | v +------------------------------+ | Early Warning Issued         | +--------------+---------------+ | v +------------------------------+ | Preparedness & Evacuation    | +------------------------------+
----
+Weather Observation
+(Satellites / Radar / Sensors)
+            |
+            v
+Data Collection & Processing
+            |
+            v
+Weather Analysis & Prediction
+            |
+            v
+Early Warning Issued
+            |
+            v
+Preparedness & Evacuation
 
 ## Role of Scientific Agencies
 Scientific agencies focus on **geological, hydrological, and environmental hazards**. Their responsibilities include:
@@ -146,7 +158,17 @@ The Sendai Framework is a global agreement aimed at reducing disaster risks and 
 
 ## Sendai Framework Flow (Diagram)
 
-Hazard Identification | v Risk Assessment | v Early Warning Systems | v Preparedness & Resilience
+Hazard Monitoring
+(Earthquake / Flood / Tsunami)
+            |
+            v
+Scientific Data Analysis
+            |
+            v
+Risk & Impact Assessment
+            |
+            v
+Mitigation Planning
 
 ---
 
@@ -207,7 +229,16 @@ NDRF is a specialized force trained for disaster response. Its duties include:
 
 ## Disaster Management Structure (Diagram)
 
-NDMA (Policy & Planning) | v SDMA (State Coordination) | v NDRF (Rescue & Response)
+NDMA
+(National Policy & Planning)
+            |
+            v
+SDMA
+(State-Level Coordination)
+            |
+            v
+NDRF
+(Rescue & Response)
 
 ---
 
