@@ -42,8 +42,7 @@ Meteorological data helps authorities to:
 
 ## Weather Forecasting and Warning Flow (Diagram)
 
-Weather Observation (Satellite / Radar / Sensors) | v Data Collection & Processing | v Weather Analysis & Prediction | v Early Warning Issued | v Preparedness, Evacuation & Response
-
++------------------------------+ | Weather Observation          | | (Satellite / Radar / Sensors)| +--------------+---------------+ | v +------------------------------+ | Data Collection & Processing | +--------------+---------------+ | v +------------------------------+ | Weather Prediction Models    | +--------------+---------------+ | v +------------------------------+ | Early Warning Issued         | +--------------+---------------+ | v +------------------------------+ | Preparedness & Evacuation    | +------------------------------+
 ---
 
 ## Role of Scientific Agencies
