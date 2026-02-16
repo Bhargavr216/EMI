@@ -477,7 +477,6 @@ public class DCC {
 
 		// throw error if the event idd and order id not found in the payload
 		for (JsonNode payloadNode : payloadArray) {
-			if (payloadNode.isArray()) {
 				for (JsonNode eventNode : payloadNode) {
 					String eventId = eventNode.path("id").asText();
 					String orderId = eventNode.path("data").path("orderId").asText();
@@ -549,8 +548,7 @@ public class DCC {
 							table.schema);
 					reports.add(report);
 					printScenarioTableSummary(report);
-				}
-				
+				}				
 			} 
 
 		// String reportJson =
@@ -571,8 +569,9 @@ public class DCC {
 				throw new AssertionError("Validation failed for table " + r.tableName);
 			}
 		}
-	
 
+		}
+	}
 	// logs suppressed
 
 	private void enrichSchemaWithColumnRules(String tableName, JsonCompare.Schema schema, JsonNode expectedRow)
