@@ -1,0 +1,130 @@
+Got it 👍
+You want exact snippets showing WHERE the bug happens and WHERE the check is missing.
+No explanation fluff. Just where & where.
+
+
+---
+
+🔴 WHERE the WRONG “YES” is coming from
+
+Snippet 1 – Auth detection (this is firing YES)
+
+This function is the root trigger:
+
+async def auth_present(page) -> bool:
+    if await page.locator("input[type='password']").count() > 0:
+        return True
+    ...
+    if contains_keyword(text):
+        return True
+    ...
+    if href and contains_path_hint(href):
+        return True
+
+    return False
+
+👉 Problem:
+This function returns True for ANY login-looking page, even if it belongs to:
+
+www.zoetis.com/login.com   ❌
+
+At this point:
+
+❌ Domain is NOT checked
+
+❌ Registrable domain is NOT checked
+
+
+
+---
+
+🔴 WHERE “YES” is being decided (conceptually)
+
+Somewhere in your crawl loop (not shown in first file, but logically exists), you have code like:
+
+if await auth_present(page):
+    result = "YES"
+
+❌ THIS IS THE EXACT BUG LOCATION
+
+Because:
+
+auth_present() alone is deciding YES
+
+Domain validation is not part of this condition
+
+
+
+---
+
+🟡 WHERE the CHECK EXISTS but is NOT USED
+
+Snippet 2 – Correct domain check (but unused)
+
+You already have this function:
+
+def same_registrable_domain(a: str, b: str) -> bool:
+    ha = hostname(a).split(".")[-2:]
+    hb = hostname(b).split(".")[-2:]
+    return ha == hb
+
+And this:
+
+def is_allowed_auth_subdomain(current_url: str, input_url: str) -> bool:
+    ...
+
+✅ These functions are correct
+❌ But they are NOT enforced before setting YES
+
+
+---
+
+🔴 EXACT missing gate (this is what is NOT happening)
+
+❌ What is happening now
+
+if await auth_present(page):
+    result = "YES"
+
+✅ What SHOULD have been the gate
+
+if (
+    await auth_present(page)
+    and same_registrable_domain(input_url, current_url)
+    and is_allowed_auth_subdomain(input_url, current_url)
+):
+    result = "YES"
+
+
+---
+
+🧪 Why https://www.zoetis.com/login.com becomes YES
+
+auth_present()               → True   ✅
+same_registrable_domain()    → False  ❌
+BUT result already set to YES ❌
+
+That’s it. That’s the bug.
+
+
+---
+
+📌 One-line final answer
+
+> The issue is that auth_present(page) alone is deciding “YES”, without enforcing same_registrable_domain(input_url, current_url) at the decision point.
+
+
+
+
+---
+
+If you want next:
+
+📍 Paste your crawl loop → I’ll mark the exact line
+
+🛠 Give minimal 1-line fix
+
+🧪 Show failing vs passing URLs in table
+
+
+Just tell me 👍
